@@ -42,6 +42,44 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private val serverUrls = listOf(
+        "http://192.168.1.21:3000",
+        "http://192.168.191.244:3000",
+        "https://humane-mistakenly-shepherd.ngrok-free.app/"
+    )
+
+    private fun loadAvailableServer() {
+        Thread {
+            for (url in serverUrls) {
+                try {
+                    val connection = java.net.URL(url).openConnection() as java.net.HttpURLConnection
+                    connection.requestMethod = "HEAD"
+                    connection.connectTimeout = 3000
+                    connection.readTimeout = 3000
+                    connection.connect()
+
+                    if (connection.responseCode in 200..299) {
+                        runOnUiThread {
+                            webView.loadUrl(url)
+                        }
+                        return@Thread
+                    }
+                } catch (_: Exception) {
+                    // Сервер недоступен, пробуем следующий
+                }
+            }
+
+            // Если ни один не доступен
+            runOnUiThread {
+                webView.loadData(
+                    "<h2>Все серверы недоступны.<br>Проверьте соединение.</h2>",
+                    "text/html",
+                    "UTF-8"
+                )
+            }
+        }.start()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -86,7 +124,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        webView.loadUrl("http://192.168.191.244:3000/")
+        // webView.loadUrl("http://192.168.191.244:3000/")
+        loadAvailableServer()
     }
 
     private fun setupBackHandler() {
