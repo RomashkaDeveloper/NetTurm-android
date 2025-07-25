@@ -8,6 +8,15 @@ android {
     namespace = "com.example.netturm"
     compileSdk = 36
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("C:/Users/Forza/AndroidStudioProjects/NetTurm/my-release-key.jks")
+            storePassword = "?Rootmine22"
+            keyAlias = "my-alias"
+            keyPassword = "?Rootmine22"
+        }
+    }
+
     defaultConfig {
         applicationId = "com.example.netturm"
         minSdk = 31
@@ -20,6 +29,7 @@ android {
 
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
