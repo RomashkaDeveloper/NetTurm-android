@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val serverUrls = listOf(
-        "https://https://netturm.ru.tuna.am/",
+        "https://netturm.ru.tuna.am/",
         "http://192.168.1.21:3000",
         "http://192.168.191.244:3000"
     )
